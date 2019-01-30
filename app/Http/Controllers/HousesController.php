@@ -7,9 +7,10 @@ use App\House;
 
 class HousesController extends Controller
 {
-    public function index(){
-        $houses = House::all();
-
+    public function index(Request $request){
+        
+        $houses = House::search($request);
+        
         return view('home', [
             'houses' => $houses
         ]);
