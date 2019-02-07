@@ -1,6 +1,8 @@
 # Instruction
 
-Please run the Seed to populate the database
+1. Please run artisan seed to populate database
+2. Home will display all houses in default filter parameters ```/?rating=10&price_max=99999&pricemin_min=0&quality=10```
+3. ```/json?[parameter]``` will return result in JSON format
 
 # Scenario
 

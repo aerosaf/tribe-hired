@@ -9,34 +9,22 @@ class HousesController extends Controller
 {
     public function index(Request $request){
         
-        $houses = House::search($request);
+        $House = new House;
+        $houses = $House
+        ->getRequest($request)
+        ->search();
         
         return view('home', [
             'houses' => $houses
         ]);
     }
 
-    public function price(){
-        $houses = House::orderBy('price')->get();
+    public function filterJson(Request $request){
 
-        return view('home', [
-            'houses' => $houses
-        ]);
-    }
+        $House = new House;
 
-    public function rating(){
-        $houses = House::orderBy('rating', 'desc')->get();
-
-        return view('home', [
-            'houses' => $houses
-        ]);
-    }
-
-    public function quality(){
-        $houses = House::orderBy('quality', 'desc')->get();
-
-        return view('home', [
-            'houses' => $houses
-        ]);
+        return $houses = $House
+        ->getRequest($request)
+        ->search();
     }
 }

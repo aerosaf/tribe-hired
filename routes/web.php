@@ -13,8 +13,4 @@
 
 Route::get('/', 'HousesController@index');
 
-Route::get('/price', 'HousesController@price');
-
-Route::get('/rating', 'HousesController@rating');
-
-Route::get('/quality', 'HousesController@quality');
+Route::get('/json', 'HousesController@filterJson');

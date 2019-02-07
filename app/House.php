@@ -6,22 +6,40 @@ use Illuminate\Database\Eloquent\Model;
 
 class House extends Model
 {
-    public static function search($request) {
-        
-        // Set default value if request is empty
-        $rating = isset($request['rating']) ? $request['rating'] : '10';
-        $ratingDirect = isset($request['rating']) ? '=' : '<=';
-        $price_min = isset($request['price_min']) ? $request['price_min'] : '0';
-        $price_max = isset($request['price_max']) ? $request['price_max'] : '99999';
-        $quality = isset($request['quality']) ? $request['quality'] : '10';
-        $qualityDirect = isset($request['quality']) ? '=' : '<=';
+    // Default filter values
+    const RATING = 10;
+    const PRICE_MAX = 99999;
+    const PRICE_MIN = 0;
+    const QUALITY = 10;
 
-        $houses = self::where('rating', $ratingDirect, $rating)
-                    ->where('price', '<', $price_max)
-                    ->where('price', '>', $price_min)
-                    ->where('quality', $qualityDirect, $quality)
+    protected $rating;
+    protected $ratingDirect;
+    protected $price_min;
+    protected $price_max;
+    protected $quality;
+    protected $qualityDirect;
+
+
+    public function getRequest($request){
+        // Set default value if request is empty
+        $this->rating = $request->input('rating', self::RATING);
+        $this->ratingDirect = $request->input('rating') === null ? '<=' : '=';
+        $this->price_min = $request->input('price_min', self::PRICE_MIN);
+        $this->price_max = $request->input('price_max', self::PRICE_MAX);
+        $this->quality = $request->input('quality', self::QUALITY);
+        $this->qualityDirect = $request->input('quality') === null ? '<=' : '=';
+
+        return $this;
+    }
+
+    public function search(){
+        // Query filtered houses
+        $houses = self::where('rating', $this->ratingDirect, $this->rating)
+                    ->where('price', '<', $this->price_max)
+                    ->where('price', '>', $this->price_min)
+                    ->where('quality', $this->qualityDirect, $this->quality)
                     ->get();
-                    
+
         return $houses;
     }
 }
