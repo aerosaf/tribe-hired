@@ -9,22 +9,17 @@ class HousesController extends Controller
 {
     public function index(Request $request){
         
-        $House = new House;
-        $houses = $House
-        ->getRequest($request)
-        ->search();
+        $house = new House;
         
         return view('home', [
-            'houses' => $houses
+            'houses' => $house::search($request)
         ]);
     }
 
     public function filterJson(Request $request){
 
-        $House = new House;
+        $house = new House;
 
-        return $houses = $House
-        ->getRequest($request)
-        ->search();
+        return $house::search($request);
     }
 }

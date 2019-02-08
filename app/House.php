@@ -14,8 +14,8 @@ class House extends Model
 
     protected $rating;
     protected $ratingDirect;
-    protected $price_min;
-    protected $price_max;
+    protected $priceMin;
+    protected $priceMax;
     protected $quality;
     protected $qualityDirect;
 
@@ -24,22 +24,26 @@ class House extends Model
         // Set default value if request is empty
         $this->rating = $request->input('rating', self::RATING);
         $this->ratingDirect = $request->input('rating') === null ? '<=' : '=';
-        $this->price_min = $request->input('price_min', self::PRICE_MIN);
-        $this->price_max = $request->input('price_max', self::PRICE_MAX);
+        $this->priceMin = $request->input('price_min', self::PRICE_MIN);
+        $this->priceMax = $request->input('price_max', self::PRICE_MAX);
         $this->quality = $request->input('quality', self::QUALITY);
         $this->qualityDirect = $request->input('quality') === null ? '<=' : '=';
 
         return $this;
     }
 
-    public function search(){
+    public function getHouses(){
         // Query filtered houses
         $houses = self::where('rating', $this->ratingDirect, $this->rating)
-                    ->where('price', '<', $this->price_max)
-                    ->where('price', '>', $this->price_min)
+                    ->where('price', '<', $this->priceMax)
+                    ->where('price', '>', $this->priceMin)
                     ->where('quality', $this->qualityDirect, $this->quality)
                     ->get();
 
         return $houses;
+    }
+
+    public static function search($request) {
+        return (new static)->getRequest($request)->getHouses();
     }
 }
